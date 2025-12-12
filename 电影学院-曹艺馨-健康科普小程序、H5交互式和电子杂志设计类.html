@@ -1,0 +1,2541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健康生活方式 - 四大基石与三减三健</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <!-- GSAP for advanced animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4CAF50',
+                        secondary: '#2196F3',
+                        accent: '#FF9800',
+                        light: '#E8F5E9',
+                        dark: '#2E7D32'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .text-shadow-lg {
+                text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+            }
+            .page-transition {
+                transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+            .progress-bar {
+                height: 4px;
+                background: linear-gradient(90deg, #4CAF50 0%, #2196F3 100%);
+                transition: width 0.3s ease;
+            }
+            .step-indicator {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background-color: #e2e8f0;
+                transition: all 0.3s ease;
+            }
+            .step-indicator.active {
+                background-color: #4CAF50;
+                transform: scale(1.2);
+            }
+            .step-indicator.completed {
+                background-color: #2196F3;
+            }
+            .tab-content {
+                display: none;
+            }
+            .tab-content.active {
+                display: block;
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .slider {
+                -webkit-appearance: none;
+                width: 100%;
+                height: 8px;
+                border-radius: 5px;
+                background: #d3d3d3;
+                outline: none;
+            }
+            .slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background: #4CAF50;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+            .slider::-webkit-slider-thumb:hover {
+                transform: scale(1.2);
+                background: #2E7D32;
+            }
+            .slider::-moz-range-thumb {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background: #4CAF50;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                border: none;
+            }
+            .slider::-moz-range-thumb:hover {
+                transform: scale(1.2);
+                background: #2E7D32;
+            }
+            .flip-card {
+                perspective: 1000px;
+            }
+            .flip-card-inner {
+                transition: transform 0.6s;
+                transform-style: preserve-3d;
+            }
+            .flip-card:hover .flip-card-inner {
+                transform: rotateY(180deg);
+            }
+            .flip-card-front, .flip-card-back {
+                backface-visibility: hidden;
+            }
+            .flip-card-back {
+                transform: rotateY(180deg);
+            }
+        }
+    </style>
+    
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            overflow-x: hidden;
+            background-color: #f8fafc;
+        }
+        
+        .page {
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+            padding: 2rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .page-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .navigation-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-dot.active {
+            width: 30px;
+            border-radius: 5px;
+            background-color: white;
+        }
+        
+        .nav-arrow {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-arrow:hover {
+            transform: scale(1.1);
+            background-color: white;
+        }
+        
+        .fullscreen-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(0.7);
+        }
+        
+        .content-overlay {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #4CAF50, #2196F3);
+            border-radius: 2px;
+        }
+        
+        .feature-card {
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #4CAF50, #2E7D32);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 10px rgba(76, 175, 80, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(90deg, #2196F3, #1976D2);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(33, 150, 243, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 10px rgba(33, 150, 243, 0.4);
+        }
+        
+        .btn-accent {
+            background: linear-gradient(90deg, #FF9800, #F57C00);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(255, 152, 0, 0.3);
+        }
+        
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 10px rgba(255, 152, 0, 0.4);
+        }
+        
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background-color: #f1f5f9;
+            color: #64748b;
+            font-weight: 600;
+            border-radius: 0.5rem 0.5rem 0 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            background-color: white;
+            color: #4CAF50;
+            box-shadow: 0 -2px 0 0 #4CAF50;
+        }
+        
+        .tab-button:hover:not(.active) {
+            background-color: #e2e8f0;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4CAF50;
+        }
+        
+        .checkbox-container label {
+            cursor: pointer;
+            color: #334155;
+        }
+        
+        .radio-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .radio-container input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4CAF50;
+        }
+        
+        .radio-container label {
+            cursor: pointer;
+            color: #334155;
+        }
+        
+        .result-card {
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .result-good {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .result-average {
+            background-color: #fff3e0;
+            border-left: 4px solid #FF9800;
+        }
+        
+        .result-poor {
+            background-color: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+        
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin: 2rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .page {
+                padding: 1rem;
+            }
+            
+            .content-overlay {
+                padding: 1.5rem;
+            }
+            
+            .navigation {
+                bottom: 1rem;
+            }
+            
+            .nav-arrow {
+                width: 35px;
+                height: 35px;
+            }
+        }
+        
+        /* Custom animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            70% { transform: scale(1.2); opacity: 0; }
+            100% { transform: scale(0.8); opacity: 0; }
+        }
+        
+        .pulse-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: rgba(76, 175, 80, 0.4);
+            animation: pulse-ring 2s infinite;
+        }
+        
+        .pulse-ring-delay-1 {
+            animation-delay: 0.3s;
+        }
+        
+        .pulse-ring-delay-2 {
+            animation-delay: 0.6s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-1 z-50">
+        <div id="progress-bar" class="progress-bar w-0"></div>
+    </div>
+
+    <!-- Page 1: Cover -->
+    <div id="page-1" class="page bg-gradient-to-br from-green-400 to-blue-500">
+        <div class="page-container flex flex-col items-center justify-center text-center">
+            <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/d7e9a1cbeb0040518e89c63f83354bed~tplv-a9rns2rl98-image.image?rcl=20251210141206D34D2E22089672701878&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1767939165&x-signature=Z8GJ1ABc2ok36GGYcrzChR7z7ME%3D" 
+                 alt="健康生活方式四大基石和三减三健" 
+                 class="w-full max-w-2xl rounded-lg shadow-2xl mb-8"
+                 data-aos="zoom-in"
+                 data-aos-duration="1000">
+            
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 text-shadow-lg"
+                data-aos="fade-up"
+                data-aos-delay="200">
+                健康生活方式
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-white mb-8 max-w-2xl text-shadow"
+               data-aos="fade-up"
+               data-aos-delay="400">
+                四大基石与三减三健，守护您的健康人生
+            </p>
+            
+            <button class="btn-primary text-lg px-8 py-3 rounded-full"
+                    onclick="nextPage()"
+                    data-aos="fade-up"
+                    data-aos-delay="600">
+                开始探索 <i class="fa fa-arrow-right ml-2"></i>
+            </button>
+            
+            <div class="absolute bottom-10 left-0 right-0 flex justify-center">
+                <div class="animate-bounce">
+                    <i class="fa fa-angle-down text-white text-3xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2: Introduction -->
+    <div id="page-2" class="page bg-white hidden">
+        <div class="page-container">
+            <div class="content-overlay">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 section-title"
+                    data-aos="fade-right">
+                    健康生活，从了解开始
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div data-aos="fade-right">
+                        <p class="text-gray-700 mb-4">
+                            世界卫生组织指出，健康不仅仅是没有疾病，而是身体、心理和社会适应的完好状态。研究表明，健康的生活方式可以预防80%以上的心脏病、脑卒中和2型糖尿病，以及40%以上的癌症。
+                        </p>
+                        
+                        <p class="text-gray-700 mb-4">
+                            为了帮助人们改善生活方式，预防疾病，提升健康水平，世界卫生组织于1992年提出了健康四大基石的概念，即合理膳食、适量运动、戒烟限酒和心理平衡。
+                        </p>
+                        
+                        <p class="text-gray-700">
+                            在此基础上，我国又提出了"三减三健"专项行动，即减盐、减油、减糖，健康口腔、健康体重、健康骨骼，进一步细化了健康生活的具体实践。
+                        </p>
+                    </div>
+                    
+                    <div class="bg-light rounded-xl p-6 shadow-md"
+                         data-aos="fade-left">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                            健康生活方式的益处
+                        </h3>
+                        
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                                <span>降低慢性病风险，如高血压、糖尿病、心脑血管疾病</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                                <span>增强免疫力，减少感染性疾病的发生</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                                <span>改善心理状态，减轻压力和焦虑</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                                <span>提高生活质量，延长健康寿命</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                                <span>降低医疗费用，减轻家庭和社会负担</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-8 flex justify-between">
+                    <button class="btn-secondary" onclick="prevPage()">
+                        <i class="fa fa-arrow-left mr-2"></i> 返回
+                    </button>
+                    <button class="btn-primary" onclick="nextPage()">
+                        了解四大基石 <i class="fa fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 3: Four Cornerstones Overview -->
+    <div id="page-3" class="page bg-gradient-to-br from-green-50 to-blue-50 hidden">
+        <div class="page-container">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center"
+                data-aos="fade-up">
+                健康生活方式四大基石
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1: 合理膳食 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden feature-card"
+                     data-aos="fade-up"
+                     data-aos-delay="100">
+                    <div class="h-48 bg-green-100 flex items-center justify-center">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/cf75d3bd1289422ca3460102fee1655b~tplv-a9rns2rl98-image.image?rcl=20251210141206D34D2E22089672701878&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1767939160&x-signature=5U0CbahGlcdLm83K0MNaGX%2Bh7zU%3D" 
+                             alt="合理膳食" 
+                             class="h-40 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <div class="feature-icon bg-green-500">
+                            <i class="fa fa-cutlery"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">合理膳食</h3>
+                        <p class="text-gray-600 mb-4">
+                            食物多样化，荤素搭配，控制油盐糖，多吃蔬果和全谷物。
+                        </p>
+                        <button class="text-primary font-medium flex items-center"
+                                onclick="showTab('diet-detail')">
+                            了解更多 <i class="fa fa-angle-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Card 2: 适量运动 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden feature-card"
+                     data-aos="fade-up"
+                     data-aos-delay="200">
+                    <div class="h-48 bg-blue-100 flex items-center justify-center">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/85c44655ae804e5e8c261ba6292651bd~tplv-a9rns2rl98-image.image?rcl=20251210141206D34D2E22089672701878&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1767939161&x-signature=wUVWsov5Fjx2YUMi6fZ9DdkL65Y%3D" 
+                             alt="适量运动" 
+                             class="h-40 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <div class="feature-icon bg-blue-500">
+                            <i class="fa fa-heartbeat"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">适量运动</h3>
+                        <p class="text-gray-600 mb-4">
+                            每天30-60分钟中等强度运动，保持健康体重，增强心肺功能。
+                        </p>
+                        <button class="text-secondary font-medium flex items-center"
+                                onclick="showTab('exercise-detail')">
+                            了解更多 <i class="fa fa-angle-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Card 3: 戒烟限酒 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden feature-card"
+                     data-aos="fade-up"
+                     data-aos-delay="300">
+                    <div class="h-48 bg-red-100 flex items-center justify-center">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/43a4e2181d824ddabec262be2aa56eea~tplv-a9rns2rl98-image.image?rcl=20251210141206D34D2E22089672701878&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1767939163&x-signature=FG9GTiImKv029vPS4IU%2BoBF7nwU%3D" 
+                             alt="戒烟限酒" 
+                             class="h-40 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <div class="feature-icon bg-red-500">
+                            <i class="fa fa-ban"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">戒烟限酒</h3>
+                        <p class="text-gray-600 mb-4">
+                            吸烟有害健康，饮酒需限量，创造无烟环境，远离二手烟。
+                        </p>
+                        <button class="text-red-500 font-medium flex items-center"
+                                onclick="showTab('quit-detail')">
+                            了解更多 <i class="fa fa-angle-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Card 4: 心理平衡 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden feature-card"
+                     data-aos="fade-up"
+                     data-aos-delay="400">
+                    <div class="h-48 bg-purple-100 flex items-center justify-center">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/1c9ac9dfbb1e4f3cb0c626b514228b2b~tplv-a9rns2rl98-image.image?rcl=20251210141206D34D2E22089672701878&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1767939160&x-signature=N14q%2FdBOnK%2B9tJawyk6FU5hDQ58%3D" 
+                             alt="心理平衡" 
+                             class="h-40 object-contain">
+                    </div>
+                    <div class="p-6">
+                        <div class="feature-icon bg-purple-500">
+                            <i class="fa fa-smile-o"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">心理平衡</h3>
+                        <p class="text-gray-600 mb-4">
+                            保持积极乐观心态，学会压力管理，建立良好人际关系。
+                        </p>
+                        <button class="text-purple-500 font-medium flex items-center"
+                                onclick="showTab('mental-detail')">
+                            了解更多 <i class="fa fa-angle-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Detailed Tabs -->
+            <div class="mt-10 bg-white rounded-xl shadow-md p-6">
+                <div class="flex border-b border-gray-200 mb-6 overflow-x-auto">
+                    <button class="tab-button active" data-tab="diet-detail">合理膳食</button>
+                    <button class="tab-button" data-tab="exercise-detail">适量运动</button>
+                    <button class="tab-button" data-tab="quit-detail">戒烟限酒</button>
+                    <button class="tab-button" data-tab="mental-detail">心理平衡</button>
+                </div>
+                
+                <!-- 合理膳食详情 -->
+                <div id="diet-detail" class="tab-content active">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">合理膳食的原则</h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                                    <span><strong>食物多样：</strong>每天摄入12种以上食物，每周25种以上</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                                    <span><strong>谷类为主：</strong>每天摄入200-300g谷类食物，其中全谷物和杂豆类50-150g</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                                    <span><strong>多吃蔬果：</strong>每天摄入300-500g蔬菜，200-350g水果</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                                    <span><strong>适量蛋白质：</strong>鱼、禽、蛋、瘦肉每天摄入120-200g</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                                    <span><strong>常吃奶类：</strong>每天摄入300g牛奶或相当量的奶制品</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                                    <span><strong>控制盐油糖：</strong>每天盐摄入不超过5g，油25-30g，糖不超过50g</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">平衡膳食餐盘</h3>
+                            <div class="bg-light rounded-lg p-4 mb-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-green-100 rounded-lg p-3 text-center">
+                                        <p class="font-medium">蔬果类</p>
+                                        <p class="text-sm text-gray-600">占餐盘1/2</p>
+                                    </div>
+                                    <div class="bg-yellow-100 rounded-lg p-3 text-center">
+                                        <p class="font-medium">谷薯类</p>
+                                        <p class="text-sm text-gray-600">占餐盘1/4</p>
+                                    </div>
+                                    <div class="bg-red-100 rounded-lg p-3 text-center">
+                                        <p class="font-medium">蛋白质</p>
+                                        <p class="text-sm text-gray-600">占餐盘1/4</p>
+                                    </div>
+                                    <div class="bg-blue-100 rounded-lg p-3 text-center">
+                                        <p class="font-medium">奶制品</p>
+                                        <p class="text-sm text-gray-600">每日300g</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                                <h4 class="font-semibold text-gray-800 mb-2">小贴士</h4>
+                                <p class="text-gray-700">
+                                    合理膳食不仅是"吃什么"，还包括"怎么吃"。建议定时定量，细嚼慢咽，避免暴饮暴食；少吃油炸、腌制、烟熏食品；多喝水，少喝含糖饮料。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 适量运动详情 -->
+                <div id="exercise-detail" class="tab-content">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">运动的益处</h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fa fa-heartbeat text-secondary mt-1 mr-3"></i>
+                                    <span>增强心肺功能，降低心血管疾病风险</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-heartbeat text-secondary mt-1 mr-3"></i>
+                                    <span>控制体重，预防肥胖</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-heartbeat text-secondary mt-1 mr-3"></i>
+                                    <span>增强肌肉和骨骼强度，预防骨质疏松</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-heartbeat text-secondary mt-1 mr-3"></i>
+                                    <span>改善睡眠质量，缓解压力和焦虑</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-heartbeat text-secondary mt-1 mr-3"></i>
+                                    <span>提高免疫力，减少疾病发生</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-heartbeat text-secondary mt-1 mr-3"></i>
+                                    <span>延长寿命，提高生活质量</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">运动建议</h3>
+                            <div class="bg-light rounded-lg p-4 mb-4">
+                                <h4 class="font-medium mb-2">成年人每周运动推荐</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center">
+                                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                                        <span>中等强度有氧运动：150-300分钟</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                                        <span>高强度有氧运动：75-150分钟</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                                        <span>肌肉强化训练：每周2次以上</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-4">
+                                <h4 class="font-semibold text-gray-800 mb-2">运动注意事项</h4>
+                                <p class="text-gray-700 mb-2">
+                                    <strong>循序渐进：</strong>从低强度开始，逐渐增加运动量和强度
+                                </p>
+                                <p class="text-gray-700 mb-2">
+                                    <strong>量力而行：</strong>根据自身健康状况选择适合的运动方式
+                                </p>
+                                <p class="text-gray-700">
+                                    <strong>注意安全：</strong>运动前做好热身，运动后做好拉伸；避免过度运动导致损伤
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 戒烟限酒详情 -->
+                <div id="quit-detail" class="tab-content">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">吸烟的危害</h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-triangle text-red-500 mt-1 mr-3"></i>
+                                    <span>吸烟是肺癌的主要危险因素，吸烟者患肺癌的风险是不吸烟者的8-12倍</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-triangle text-red-500 mt-1 mr-3"></i>
+                                    <span>增加心脑血管疾病风险，如冠心病、脑卒中等</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-triangle text-red-500 mt-1 mr-3"></i>
+                                    <span>损害呼吸系统，导致慢性阻塞性肺疾病、支气管炎等</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-triangle text-red-500 mt-1 mr-3"></i>
+                                    <span>影响生殖健康，降低生育能力，增加流产风险</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-triangle text-red-500 mt-1 mr-3"></i>
+                                    <span>二手烟同样危害健康，可导致非吸烟者患肺癌、冠心病等疾病</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">饮酒的影响</h3>
+                            <div class="bg-light rounded-lg p-4 mb-4">
+                                <h4 class="font-medium mb-2">适量饮酒与过量饮酒</h4>
+                                <p class="text-gray-700 mb-2">
+                                    <strong>适量饮酒：</strong>成年男性一天饮用酒精量不超过25g（相当于啤酒750ml、白酒50ml）；成年女性不超过15g（相当于啤酒450ml、白酒30ml）
+                                </p>
+                                <p class="text-gray-700">
+                                    <strong>过量饮酒：</strong>增加肝脏损伤、心血管疾病、癌症等风险，影响判断力和反应能力，增加意外事故发生风险
+                                </p>
+                            </div>
+                            
+                            <div class="bg-red-50 border-l-4 border-red-400 p-4">
+                                <h4 class="font-semibold text-gray-800 mb-2">建议</h4>
+                                <p class="text-gray-700 mb-2">
+                                    <strong>戒烟：</strong>任何时候戒烟都不晚，越早戒烟，健康获益越大
+                                </p>
+                                <p class="text-gray-700">
+                                    <strong>限酒：</strong>最好不饮酒，若饮酒需限量；孕妇、儿童青少年、慢性病患者等特殊人群不应饮酒
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 心理平衡详情 -->
+                <div id="mental-detail" class="tab-content">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">心理健康的重要性</h3>
+                            <p class="text-gray-700 mb-4">
+                                心理健康是整体健康的重要组成部分，与身体健康密切相关。研究表明，长期的负面情绪和压力会影响免疫系统功能，增加疾病风险。
+                            </p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fa fa-lightbulb-o text-purple-500 mt-1 mr-3"></i>
+                                    <span>良好的心理状态有助于预防和控制慢性病</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-lightbulb-o text-purple-500 mt-1 mr-3"></i>
+                                    <span>心理平衡可以提高生活质量和幸福感</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-lightbulb-o text-purple-500 mt-1 mr-3"></i>
+                                    <span>积极的心态有助于应对生活中的挑战和压力</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-lightbulb-o text-purple-500 mt-1 mr-3"></i>
+                                    <span>心理健康对人际关系和社会适应能力有重要影响</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">保持心理平衡的方法</h3>
+                            <div class="bg-light rounded-lg p-4 mb-4">
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-purple-500 mt-1 mr-3"></i>
+                                        <span><strong>接纳自己：</strong>正确认识和评价自己，接受自己的优点和不足</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-purple-500 mt-1 mr-3"></i>
+                                        <span><strong>积极思考：</strong>培养乐观的生活态度，关注事物的积极面</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-purple-500 mt-1 mr-3"></i>
+                                        <span><strong>情绪管理：</strong>学会识别和调节自己的情绪，适当表达和释放压力</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-purple-500 mt-1 mr-3"></i>
+                                        <span><strong>建立支持系统：</strong>与家人朋友保持良好沟通，寻求社会支持</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-purple-500 mt-1 mr-3"></i>
+                                        <span><strong>培养兴趣爱好：</strong>丰富生活内容，增加生活乐趣</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-purple-500 mt-1 mr-3"></i>
+                                        <span><strong>适当运动：</strong>运动可以促进内啡肽分泌，改善情绪</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-purple-50 border-l-4 border-purple-400 p-4">
+                                <h4 class="font-semibold text-gray-800 mb-2">小贴士</h4>
+                                <p class="text-gray-700">
+                                    当感到压力过大或情绪困扰时，可以尝试深呼吸、冥想、听音乐等放松技巧；如果负面情绪持续存在，影响日常生活，建议寻求专业心理咨询帮助。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 flex justify-between">
+                <button class="btn-secondary" onclick="prevPage()">
+                    <i class="fa fa-arrow-left mr-2"></i> 返回
+                </button>
+                <button class="btn-primary" onclick="nextPage()">
+                    了解三减三健 <i class="fa fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 4: Three Reductions Overview -->
+    <div id="page-4" class="page bg-gradient-to-br from-blue-50 to-green-50 hidden">
+        <div class="page-container">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center"
+                data-aos="fade-up">
+                三减三健 健康生活
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                <div class="bg-white rounded-xl shadow-md p-6"
+                     data-aos="fade-right">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fa fa-minus-circle text-blue-500 mr-3"></i>
+                        三减
+                    </h3>
+                    <p class="text-gray-700 mb-6">
+                        "三减"是指减盐、减油、减糖，旨在降低慢性病风险，提高健康水平。
+                    </p>
+                    
+                    <div class="flex flex-col space-y-4">
+                        <button class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium py-3 px-4 rounded-lg flex items-center justify-between transition-all"
+                                onclick="showTab('salt-reduction')">
+                            <span class="flex items-center">
+                                <i class="fa fa-shaker text-blue-500 mr-3"></i>
+                                减盐
+                            </span>
+                            <i class="fa fa-angle-right"></i>
+                        </button>
+                        
+                        <button class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium py-3 px-4 rounded-lg flex items-center justify-between transition-all"
+                                onclick="showTab('oil-reduction')">
+                            <span class="flex items-center">
+                                <i class="fa fa-tint text-blue-500 mr-3"></i>
+                                减油
+                            </span>
+                            <i class="fa fa-angle-right"></i>
+                        </button>
+                        
+                        <button class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium py-3 px-4 rounded-lg flex items-center justify-between transition-all"
+                                onclick="showTab('sugar-reduction')">
+                            <span class="flex items-center">
+                                <i class="fa fa-birthday-cake text-blue-500 mr-3"></i>
+                                减糖
+                            </span>
+                            <i class="fa fa-angle-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-md p-6"
+                     data-aos="fade-left">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fa fa-plus-circle text-green-500 mr-3"></i>
+                        三健
+                    </h3>
+                    <p class="text-gray-700 mb-6">
+                        "三健"是指健康口腔、健康体重、健康骨骼，是维护身体健康的重要方面。
+                    </p>
+                    
+                    <div class="flex flex-col space-y-4">
+                        <button class="bg-green-50 hover:bg-green-100 text-green-700 font-medium py-3 px-4 rounded-lg flex items-center justify-between transition-all"
+                                onclick="showTab('oral-health')">
+                            <span class="flex items-center">
+                                <i class="fa fa-tooth text-green-500 mr-3"></i>
+                                健康口腔
+                            </span>
+                            <i class="fa fa-angle-right"></i>
+                        </button>
+                        
+                        <button class="bg-green-50 hover:bg-green-100 text-green-700 font-medium py-3 px-4 rounded-lg flex items-center justify-between transition-all"
+                                onclick="showTab('weight-health')">
+                            <span class="flex items-center">
+                                <i class="fa fa-balance-scale text-green-500 mr-3"></i>
+                                健康体重
+                            </span>
+                            <i class="fa fa-angle-right"></i>
+                        </button>
+                        
+                        <button class="bg-green-50 hover:bg-green-100 text-green-700 font-medium py-3 px-4 rounded-lg flex items-center justify-between transition-all"
+                                onclick="showTab('bone-health')">
+                            <span class="flex items-center">
+                                <i class="fa fa-child text-green-500 mr-3"></i>
+                                健康骨骼
+                            </span>
+                            <i class="fa fa-angle-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 三减三健详情 -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <div class="flex border-b border-gray-200 mb-6 overflow-x-auto">
+                    <button class="tab-button active" data-tab="salt-reduction">减盐</button>
+                    <button class="tab-button" data-tab="oil-reduction">减油</button>
+                    <button class="tab-button" data-tab="sugar-reduction">减糖</button>
+                    <button class="tab-button" data-tab="oral-health">健康口腔</button>
+                    <button class="tab-button" data-tab="weight-health">健康体重</button>
+                    <button class="tab-button" data-tab="bone-health">健康骨骼</button>
+                </div>
+                
+                <!-- 减盐详情 -->
+                <div id="salt-reduction" class="tab-content active">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">盐与健康的关系</h3>
+                            <p class="text-gray-700 mb-4">
+                                盐是日常生活中不可缺少的调味品，但过量摄入会对健康造成危害。高盐饮食是高血压的主要危险因素之一，而高血压又会增加心脏病、脑卒中等疾病的风险。
+                            </p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <span>过量摄入盐会导致体内水分潴留，增加血容量和血压</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <span>长期高盐饮食会损伤血管内皮细胞，增加动脉硬化风险</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <span>高盐饮食还与胃癌、骨质疏松等疾病有关</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">减盐建议</h3>
+                            <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                                <h4 class="font-medium mb-2">每日盐摄入量标准</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center">
+                                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                                        <span>成年人：不超过5g（约1茶匙）</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                                        <span>儿童青少年：根据年龄适当减少</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-4">
+                                <h4 class="font-semibold text-gray-800 mb-2">减盐小技巧</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>使用限盐勺，控制用盐量</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>多用天然调味料如葱、姜、蒜、柠檬汁等提味</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>少吃腌制食品、加工食品和方便食品</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>阅读食品标签，选择低盐产品</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>逐渐减少盐的用量，让味蕾适应清淡口味</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 减油详情 -->
+                <div id="oil-reduction" class="tab-content">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">油与健康的关系</h3>
+                            <p class="text-gray-700 mb-4">
+                                油脂是人体必需的营养素之一，但过量摄入会导致能量过剩，增加肥胖、高血脂、心脑血管疾病等风险。
+                            </p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <span>过量摄入油脂会导致脂肪在体内堆积，引起肥胖</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <span>长期高油饮食会增加血脂水平，导致动脉硬化</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <span>油炸食品中的反式脂肪酸和致癌物质对健康危害更大</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">减油建议</h3>
+                            <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                                <h4 class="font-medium mb-2">每日油摄入量标准</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center">
+                                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                                        <span>成年人：25-30g（约2-3汤匙）</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                                        <span>儿童青少年：根据年龄适当减少</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-4">
+                                <h4 class="font-semibold text-gray-800 mb-2">减油小技巧</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>使用控油壶，控制用油量</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>选择蒸、煮、炖、凉拌等低油烹饪方式</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>少吃油炸食品和高脂肪食品</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>选择植物油，经常更换油的种类</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>减少外出就餐，自己烹饪可以更好地控制用油量</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 减糖详情 -->
+                <div id="sugar-reduction" class="tab-content">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">糖与健康的关系</h3>
+                            <p class="text-gray-700 mb-4">
+                                糖是人体能量的重要来源，但过量摄入会导致能量过剩，增加肥胖、糖尿病、心血管疾病等风险。
+                            </p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <span>过量摄入糖会导致血糖升高，增加胰岛素抵抗风险</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <span>长期高糖饮食会导致肥胖，尤其是腹部肥胖</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <span>高糖饮食会增加龋齿、骨质疏松等疾病风险</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <span>过量摄入糖还会影响免疫系统功能，加速皮肤衰老</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">减糖建议</h3>
+                            <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                                <h4 class="font-medium mb-2">每日糖摄入量标准</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center">
+                                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                                        <span>成年人：添加糖不超过50g，最好控制在25g以下</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                                        <span>儿童青少年：根据年龄适当减少，最好不喝含糖饮料</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-4">
+                                <h4 class="font-semibold text-gray-800 mb-2">减糖小技巧</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>多喝白开水，少喝含糖饮料</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>少吃甜点、糖果、巧克力等高糖食品</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>选择低糖或无糖食品，注意阅读食品标签</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>用水果代替甜食，满足对甜味的需求</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-blue-500 mt-1 mr-2"></i>
+                                        <span>逐渐减少糖的用量，让味蕾适应清淡口味</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 健康口腔详情 -->
+                <div id="oral-health" class="tab-content">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">口腔健康的重要性</h3>
+                            <p class="text-gray-700 mb-4">
+                                口腔健康是全身健康的重要组成部分，不仅关系到咀嚼、发音等基本功能，还与心血管疾病、糖尿病等全身疾病密切相关。
+                            </p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>口腔疾病如牙周炎会增加心血管疾病风险</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>口腔感染会影响血糖控制，加重糖尿病</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>严重的牙周疾病可能导致早产和低出生体重儿</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>口腔健康对营养摄入和全身健康有重要影响</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">口腔保健建议</h3>
+                            <div class="bg-green-50 rounded-lg p-4 mb-4">
+                                <h4 class="font-medium mb-2">日常口腔护理</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>早晚刷牙，每次刷牙时间不少于2分钟</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>使用含氟牙膏，有效预防龋齿</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>使用牙线或牙间隙刷清洁牙缝</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>饭后漱口，减少食物残渣残留</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-green-50 border-l-4 border-green-400 p-4">
+                                <h4 class="font-semibold text-gray-800 mb-2">定期检查与预防</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>每年至少进行1次口腔检查</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>每6个月进行1次洁牙（洗牙）</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>儿童可进行窝沟封闭，预防龋齿</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>减少糖和酸性食物的摄入，预防龋齿</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>戒烟限酒，减少口腔疾病风险</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 健康体重详情 -->
+                <div id="weight-health" class="tab-content">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">体重与健康的关系</h3>
+                            <p class="text-gray-700 mb-4">
+                                健康的体重是维持身体健康的重要基础。超重和肥胖会增加多种慢性病的风险，而体重过轻则可能导致营养不良和免疫力下降。
+                            </p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <span>超重和肥胖会增加心脑血管疾病、糖尿病、癌症等风险</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <span>肥胖会增加骨关节负担，导致骨关节疾病</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <span>肥胖还会影响睡眠质量，导致睡眠呼吸暂停综合征</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-exclamation-circle text-orange-500 mt-1 mr-3"></i>
+                                    <span>体重过轻可能导致营养不良、免疫力下降、骨质疏松等问题</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">体重管理建议</h3>
+                            <div class="bg-green-50 rounded-lg p-4 mb-4">
+                                <h4 class="font-medium mb-2">健康体重标准</h4>
+                                <p class="text-gray-700 mb-2">
+                                    体重指数（BMI）是评估体重是否健康的常用指标：
+                                </p>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center">
+                                        <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                                        <span>BMI &lt; 18.5：体重过轻</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                                        <span>18.5 ≤ BMI &lt; 24：正常体重</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <div class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                                        <span>24 ≤ BMI &lt; 28：超重</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                                        <span>BMI ≥ 28：肥胖</span>
+                                    </li>
+                                </ul>
+                                <p class="text-gray-700 mt-2">
+                                    <strong>腰围标准：</strong>男性不超过85cm，女性不超过80cm
+                                </p>
+                            </div>
+                            
+                            <div class="bg-green-50 border-l-4 border-green-400 p-4">
+                                <h4 class="font-semibold text-gray-800 mb-2">保持健康体重的方法</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>合理膳食：控制总能量摄入，均衡饮食</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>适量运动：每周至少150分钟中等强度有氧运动</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>规律作息：保证充足睡眠，避免熬夜</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>定期监测：定期测量体重和腰围，及时调整</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 健康骨骼详情 -->
+                <div id="bone-health" class="tab-content">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">骨骼健康的重要性</h3>
+                            <p class="text-gray-700 mb-4">
+                                骨骼是人体的支架，不仅支撑身体，还参与钙磷代谢、造血等功能。骨骼健康对维持身体活动能力和生活质量至关重要。
+                            </p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>骨质疏松是最常见的骨骼疾病，尤其是中老年人和绝经后女性</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>骨质疏松会增加骨折风险，严重影响生活质量</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>老年人髋部骨折后，约有20%的患者在一年内死亡</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>骨骼健康还与肌肉、关节健康密切相关</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">骨骼保健建议</h3>
+                            <div class="bg-green-50 rounded-lg p-4 mb-4">
+                                <h4 class="font-medium mb-2">骨骼健康的关键营养素</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span><strong>钙：</strong>每日推荐摄入量：成年人800-1000mg，老年人1000-1200mg</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span><strong>维生素D：</strong>每日推荐摄入量：成年人10-15μg（400-600IU）</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span><strong>蛋白质：</strong>占总能量的10%-15%，有助于骨骼健康</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span><strong>其他：</strong>镁、钾、维生素K等也对骨骼健康有重要作用</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-green-50 border-l-4 border-green-400 p-4">
+                                <h4 class="font-semibold text-gray-800 mb-2">保持骨骼健康的方法</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>摄入富含钙的食物：牛奶、酸奶、豆制品、虾皮等</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>适当晒太阳：每天15-30分钟，促进维生素D合成</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>适量运动：尤其是负重运动和力量训练，有助于骨密度增加</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>避免吸烟和过量饮酒，减少咖啡因摄入</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                                        <span>老年人注意预防跌倒：改善家居环境，使用辅助工具等</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 flex justify-between">
+                <button class="btn-secondary" onclick="prevPage()">
+                    <i class="fa fa-arrow-left mr-2"></i> 返回
+                </button>
+                <button class="btn-primary" onclick="nextPage()">
+                    健康自测 <i class="fa fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 5: Health Self-assessment -->
+    <div id="page-5" class="page bg-gradient-to-br from-green-50 to-blue-50 hidden">
+        <div class="page-container">
+            <div class="content-overlay">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 section-title"
+                    data-aos="fade-right">
+                    健康生活方式自测
+                </h2>
+                
+                <p class="text-gray-700 mb-8"
+                   data-aos="fade-up">
+                    通过以下测试，了解您的健康生活方式现状，并获取个性化的健康建议。请根据您的实际情况回答问题。
+                </p>
+                
+                <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-semibold text-gray-800">健康生活方式评估</h3>
+                        <div class="text-sm text-gray-500">
+                            <span id="current-question">1</span>/<span id="total-questions">10</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div id="question-progress" class="bg-primary h-2.5 rounded-full" style="width: 10%"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="question-container">
+                        <!-- 问题1：饮食 -->
+                        <div class="question active" data-question="1">
+                            <h4 class="text-lg font-medium text-gray-800 mb-4">1. 您每天摄入的蔬果量是多少？</h4>
+                            <div class="space-y-3">
+                                <div class="radio-container">
+                                    <input type="radio" id="q1-a" name="q1" value="0">
+                                    <label for="q1-a">很少吃蔬果（每天不足100g）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q1-b" name="q1" value="1">
+                                    <label for="q1-b">偶尔吃蔬果（每天100-300g）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q1-c" name="q1" value="2">
+                                    <label for="q1-c">经常吃蔬果（每天300-500g）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q1-d" name="q1" value="3">
+                                    <label for="q1-d">大量吃蔬果（每天500g以上）</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 问题2：运动 -->
+                        <div class="question hidden" data-question="2">
+                            <h4 class="text-lg font-medium text-gray-800 mb-4">2. 您每周进行体育锻炼的频率是？</h4>
+                            <div class="space-y-3">
+                                <div class="radio-container">
+                                    <input type="radio" id="q2-a" name="q2" value="0">
+                                    <label for="q2-a">几乎不运动（每周不足1次）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q2-b" name="q2" value="1">
+                                    <label for="q2-b">偶尔运动（每周1-2次）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q2-c" name="q2" value="2">
+                                    <label for="q2-c">经常运动（每周3-4次）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q2-d" name="q2" value="3">
+                                    <label for="q2-d">规律运动（每周5次以上）</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 问题3：吸烟 -->
+                        <div class="question hidden" data-question="3">
+                            <h4 class="text-lg font-medium text-gray-800 mb-4">3. 您的吸烟情况是？</h4>
+                            <div class="space-y-3">
+                                <div class="radio-container">
+                                    <input type="radio" id="q3-a" name="q3" value="0">
+                                    <label for="q3-a">经常吸烟（每天10支以上）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q3-b" name="q3" value="1">
+                                    <label for="q3-b">偶尔吸烟（每天1-9支）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q3-c" name="q3" value="2">
+                                    <label for="q3-c">已戒烟（戒烟1年以上）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q3-d" name="q3" value="3">
+                                    <label for="q3-d">从不吸烟</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 问题4：饮酒 -->
+                        <div class="question hidden" data-question="4">
+                            <h4 class="text-lg font-medium text-gray-800 mb-4">4. 您的饮酒情况是？</h4>
+                            <div class="space-y-3">
+                                <div class="radio-container">
+                                    <input type="radio" id="q4-a" name="q4" value="0">
+                                    <label for="q4-a">经常大量饮酒（每周至少1次过量饮酒）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q4-b" name="q4" value="1">
+                                    <label for="q4-b">偶尔饮酒（每周1-2次，适量）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q4-c" name="q4" value="2">
+                                    <label for="q4-c">很少饮酒（每月1-2次）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q4-d" name="q4" value="3">
+                                    <label for="q4-d">从不饮酒</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 问题5：心理状态 -->
+                        <div class="question hidden" data-question="5">
+                            <h4 class="text-lg font-medium text-gray-800 mb-4">5. 您的心理状态如何？</h4>
+                            <div class="space-y-3">
+                                <div class="radio-container">
+                                    <input type="radio" id="q5-a" name="q5" value="0">
+                                    <label for="q5-a">经常感到压力大、焦虑或抑郁</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q5-b" name="q5" value="1">
+                                    <label for="q5-b">有时感到压力或情绪低落</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q5-c" name="q5" value="2">
+                                    <label for="q5-c">大多数时候心情平和</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q5-d" name="q5" value="3">
+                                    <label for="q5-d">经常保持积极乐观的心态</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 问题6：盐摄入 -->
+                        <div class="question hidden" data-question="6">
+                            <h4 class="text-lg font-medium text-gray-800 mb-4">6. 您的饮食口味如何？</h4>
+                            <div class="space-y-3">
+                                <div class="radio-container">
+                                    <input type="radio" id="q6-a" name="q6" value="0">
+                                    <label for="q6-a">口味很重，喜欢咸的食物</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q6-b" name="q6" value="1">
+                                    <label for="q6-b">口味适中偏咸</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q6-c" name="q6" value="2">
+                                    <label for="q6-c">口味适中</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q6-d" name="q6" value="3">
+                                    <label for="q6-d">口味清淡，很少加盐</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 问题7：油摄入 -->
+                        <div class="question hidden" data-question="7">
+                            <h4 class="text-lg font-medium text-gray-800 mb-4">7. 您平时吃油炸食品的频率是？</h4>
+                            <div class="space-y-3">
+                                <div class="radio-container">
+                                    <input type="radio" id="q7-a" name="q7" value="0">
+                                    <label for="q7-a">经常吃（每周4次以上）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q7-b" name="q7" value="1">
+                                    <label for="q7-b">有时吃（每周2-3次）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q7-c" name="q7" value="2">
+                                    <label for="q7-c">偶尔吃（每周1次）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q7-d" name="q7" value="3">
+                                    <label for="q7-d">很少吃或不吃</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 问题8：糖摄入 -->
+                        <div class="question hidden" data-question="8">
+                            <h4 class="text-lg font-medium text-gray-800 mb-4">8. 您喝含糖饮料的频率是？</h4>
+                            <div class="space-y-3">
+                                <div class="radio-container">
+                                    <input type="radio" id="q8-a" name="q8" value="0">
+                                    <label for="q8-a">每天都喝（1瓶以上）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q8-b" name="q8" value="1">
+                                    <label for="q8-b">经常喝（每周4-6次）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q8-c" name="q8" value="2">
+                                    <label for="q8-c">偶尔喝（每周1-3次）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q8-d" name="q8" value="3">
+                                    <label for="q8-d">很少喝或不喝</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 问题9：口腔健康 -->
+                        <div class="question hidden" data-question="9">
+                            <h4 class="text-lg font-medium text-gray-800 mb-4">9. 您的口腔护理习惯是？</h4>
+                            <div class="space-y-3">
+                                <div class="radio-container">
+                                    <input type="radio" id="q9-a" name="q9" value="0">
+                                    <label for="q9-a">很少刷牙，几乎不看牙医</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q9-b" name="q9" value="1">
+                                    <label for="q9-b">每天刷牙1次，很少看牙医</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q9-c" name="q9" value="2">
+                                    <label for="q9-c">每天刷牙2次，偶尔看牙医</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q9-d" name="q9" value="3">
+                                    <label for="q9-d">每天刷牙2次以上，使用牙线，定期看牙医</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 问题10：体重管理 -->
+                        <div class="question hidden" data-question="10">
+                            <h4 class="text-lg font-medium text-gray-800 mb-4">10. 您的体重状况是？</h4>
+                            <div class="space-y-3">
+                                <div class="radio-container">
+                                    <input type="radio" id="q10-a" name="q10" value="0">
+                                    <label for="q10-a">肥胖（BMI≥28）或严重消瘦（BMI&lt;17）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q10-b" name="q10" value="1">
+                                    <label for="q10-b">超重（24≤BMI&lt;28）或偏瘦（17≤BMI&lt;18.5）</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q10-c" name="q10" value="2">
+                                    <label for="q10-c">体重正常（18.5≤BMI&lt;24），但很少监测</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" id="q10-d" name="q10" value="3">
+                                    <label for="q10-d">体重正常（18.5≤BMI&lt;24），且定期监测</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between mt-8">
+                        <button id="prev-question" class="btn-secondary opacity-50 cursor-not-allowed" disabled>
+                            <i class="fa fa-arrow-left mr-2"></i> 上一题
+                        </button>
+                        <button id="next-question" class="btn-primary">
+                            下一题 <i class="fa fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 测试结果 -->
+                <div id="assessment-result" class="hidden">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">您的健康生活方式评估结果</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                                <h4 class="text-xl font-semibold text-gray-800 mb-4">总体评分</h4>
+                                <div class="flex items-center justify-center">
+                                    <div class="relative w-40 h-40">
+                                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                                            <path class="stroke-current text-gray-200" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                            <path id="result-progress" class="stroke-current text-primary" stroke-width="3" fill="none" stroke-linecap="round" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                            <text id="result-score" x="18" y="20.5" class="text-3xl font-bold text-center" fill="currentColor">0</text>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <p id="result-level" class="text-center text-lg font-medium mt-4">评估中...</p>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl shadow-md p-6">
+                                <h4 class="text-xl font-semibold text-gray-800 mb-4">健康建议摘要</h4>
+                                <ul id="result-summary" class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-spinner fa-spin text-primary mt-1 mr-3"></i>
+                                        <span>正在生成建议...</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                                <h4 class="text-xl font-semibold text-gray-800 mb-4">各维度评分</h4>
+                                <div class="space-y-4">
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm font-medium text-gray-700">合理膳食</span>
+                                            <span id="diet-score" class="text-sm font-medium text-gray-700">0/6</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                            <div id="diet-progress" class="bg-green-500 h-2 rounded-full" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm font-medium text-gray-700">适量运动</span>
+                                            <span id="exercise-score" class="text-sm font-medium text-gray-700">0/3</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                            <div id="exercise-progress" class="bg-blue-500 h-2 rounded-full" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm font-medium text-gray-700">戒烟限酒</span>
+                                            <span id="quit-score" class="text-sm font-medium text-gray-700">0/6</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                            <div id="quit-progress" class="bg-red-500 h-2 rounded-full" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm font-medium text-gray-700">心理平衡</span>
+                                            <span id="mental-score" class="text-sm font-medium text-gray-700">0/3</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                            <div id="mental-progress" class="bg-purple-500 h-2 rounded-full" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm font-medium text-gray-700">三减三健</span>
+                                            <span id="three-score" class="text-sm font-medium text-gray-700">0/9</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                            <div id="three-progress" class="bg-yellow-500 h-2 rounded-full" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl shadow-md p-6">
+                                <h4 class="text-xl font-semibold text-gray-800 mb-4">个性化建议</h4>
+                                <div id="personalized-advice" class="space-y-4">
+                                    <p class="text-gray-700">正在生成个性化建议...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 flex justify-between">
+                        <button class="btn-secondary" onclick="resetAssessment()">
+                            <i class="fa fa-refresh mr-2"></i> 重新测试
+                        </button>
+                        <button class="btn-primary" onclick="nextPage()">
+                            完成 <i class="fa fa-check ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 6: Conclusion -->
+    <div id="page-6" class="page bg-gradient-to-br from-green-400 to-blue-500 hidden">
+        <div class="page-container">
+            <div class="content-overlay">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center"
+                    data-aos="fade-up">
+                    健康生活，从现在开始
+                </h2>
+                
+                <p class="text-gray-700 mb-8 text-center max-w-2xl mx-auto"
+                   data-aos="fade-up"
+                   data-aos-delay="100">
+                    健康是人生最宝贵的财富，而健康的生活方式是维护健康的基础。通过了解四大基石和三减三健，您已经迈出了健康生活的第一步。
+                </p>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-md p-6 text-center"
+                         data-aos="fade-up"
+                         data-aos-delay="200">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fa fa-lightbulb-o text-green-500 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">知识是基础</h3>
+                        <p class="text-gray-600">
+                            了解健康知识，掌握健康技能，是健康生活的第一步。
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6 text-center"
+                         data-aos="fade-up"
+                         data-aos-delay="300">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fa fa-play-circle text-blue-500 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">行动是关键</h3>
+                        <p class="text-gray-600">
+                            将健康知识转化为实际行动，从小事做起，从现在做起。
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6 text-center"
+                         data-aos="fade-up"
+                         data-aos-delay="400">
+                        <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fa fa-calendar-check-o text-yellow-500 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">坚持是成功</h3>
+                        <p class="text-gray-600">
+                            健康生活方式需要长期坚持，才能获得健康益处。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="bg-light rounded-xl p-6 mb-8"
+                     data-aos="fade-up"
+                     data-aos-delay="500">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">健康生活小贴士</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="flex items-start">
+                            <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                            <span>每天喝足够的水，保持身体水分平衡</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                            <span>保证充足的睡眠，每天7-8小时</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                            <span>定期体检，及早发现健康问题</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                            <span>保持积极乐观的心态，学会减压</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                            <span>与家人朋友保持良好沟通，建立支持系统</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                            <span>学习急救知识，提高自我保护能力</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center"
+                     data-aos="fade-up"
+                     data-aos-delay="600">
+                    <p class="text-gray-700 mb-6">
+                        让我们一起行动起来，践行健康生活方式，创造健康美好的未来！
+                    </p>
+                    <button class="btn-primary text-lg px-8 py-3 rounded-full"
+                            onclick="restart()">
+                        重新开始 <i class="fa fa-refresh ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation">
+        <div class="navigation-dots">
+            <div class="nav-dot active" data-page="1"></div>
+            <div class="nav-dot" data-page="2"></div>
+            <div class="nav-dot" data-page="3"></div>
+            <div class="nav-dot" data-page="4"></div>
+            <div class="nav-dot" data-page="5"></div>
+            <div class="nav-dot" data-page="6"></div>
+        </div>
+        <div class="flex gap-2 mt-2">
+            <div class="nav-arrow" onclick="prevPage()">
+                <i class="fa fa-angle-left text-gray-800"></i>
+            </div>
+            <div class="nav-arrow" onclick="nextPage()">
+                <i class="fa fa-angle-right text-gray-800"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize AOS
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                once: true
+            });
+            
+            // Initialize current page
+            window.currentPage = 1;
+            updateProgressBar();
+            
+            // Initialize assessment
+            initAssessment();
+        });
+        
+        // Page navigation
+        function showPage(pageNumber) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show selected page
+            document.getElementById(`page-${pageNumber}`).classList.remove('hidden');
+            
+            // Update navigation dots
+            document.querySelectorAll('.nav-dot').forEach(dot => {
+                dot.classList.remove('active');
+            });
+            document.querySelector(`.nav-dot[data-page="${pageNumber}"]`).classList.add('active');
+            
+            // Update current page
+            window.currentPage = pageNumber;
+            
+            // Update progress bar
+            updateProgressBar();
+            
+            // Refresh AOS animations
+            setTimeout(() => {
+                AOS.refresh();
+            }, 100);
+        }
+        
+        function nextPage() {
+            const totalPages = document.querySelectorAll('.page').length;
+            if (window.currentPage < totalPages) {
+                showPage(window.currentPage + 1);
+            }
+        }
+        
+        function prevPage() {
+            if (window.currentPage > 1) {
+                showPage(window.currentPage - 1);
+            }
+        }
+        
+        function restart() {
+            showPage(1);
+        }
+        
+        function updateProgressBar() {
+            const totalPages = document.querySelectorAll('.page').length;
+            const progress = (window.currentPage / totalPages) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+        
+        // Tab switching
+        function showTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.tab === tabId) {
+                    button.classList.add('active');
+                }
+            });
+        }
+        
+        // Initialize tab buttons
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                showTab(this.dataset.tab);
+            });
+        });
+        
+        // Assessment functionality
+        function initAssessment() {
+            const totalQuestions = document.querySelectorAll('.question').length;
+            document.getElementById('total-questions').textContent = totalQuestions;
+            
+            // Initialize question navigation
+            document.getElementById('next-question').addEventListener('click', function() {
+                const currentQuestion = document.querySelector('.question.active');
+                const currentQuestionNumber = parseInt(currentQuestion.dataset.question);
+                
+                // Validate answer
+                const selectedAnswer = currentQuestion.querySelector(`input[name="q${currentQuestionNumber}"]:checked`);
+                if (!selectedAnswer) {
+                    alert('请选择一个答案');
+                    return;
+                }
+                
+                // Hide current question
+                currentQuestion.classList.add('hidden');
+                currentQuestion.classList.remove('active');
+                
+                // Show next question or results
+                if (currentQuestionNumber < totalQuestions) {
+                    const nextQuestion = document.querySelector(`.question[data-question="${currentQuestionNumber + 1}"]`);
+                    nextQuestion.classList.remove('hidden');
+                    nextQuestion.classList.add('active');
+                    
+                    // Update question counter
+                    document.getElementById('current-question').textContent = currentQuestionNumber + 1;
+                    
+                    // Update progress bar
+                    const progress = ((currentQuestionNumber + 1) / totalQuestions) * 100;
+                    document.getElementById('question-progress').style.width = `${progress}%`;
+                    
+                    // Enable/disable prev button
+                    if (currentQuestionNumber + 1 > 1) {
+                        document.getElementById('prev-question').classList.remove('opacity-50', 'cursor-not-allowed');
+                        document.getElementById('prev-question').disabled = false;
+                    }
+                } else {
+                    // Show results
+                    document.getElementById('question-container').classList.add('hidden');
+                    document.getElementById('prev-question').classList.add('hidden');
+                    document.getElementById('next-question').classList.add('hidden');
+                    document.getElementById('assessment-result').classList.remove('hidden');
+                    
+                    // Calculate and display results
+                    calculateResults();
+                }
+            });
+            
+            document.getElementById('prev-question').addEventListener('click', function() {
+                const currentQuestion = document.querySelector('.question.active');
+                const currentQuestionNumber = parseInt(currentQuestion.dataset.question);
+                
+                if (currentQuestionNumber > 1) {
+                    // Hide current question
+                    currentQuestion.classList.add('hidden');
+                    currentQuestion.classList.remove('active');
+                    
+                    // Show previous question
+                    const prevQuestion = document.querySelector(`.question[data-question="${currentQuestionNumber - 1}"]`);
+                    prevQuestion.classList.remove('hidden');
+                    prevQuestion.classList.add('active');
+                    
+                    // Update question counter
+                    document.getElementById('current-question').textContent = currentQuestionNumber - 1;
+                    
+                    // Update progress bar
+                    const progress = ((currentQuestionNumber - 1) / totalQuestions) * 100;
+                    document.getElementById('question-progress').style.width = `${progress}%`;
+                    
+                    // Disable prev button if on first question
+                    if (currentQuestionNumber - 1 === 1) {
+                        document.getElementById('prev-question').classList.add('opacity-50', 'cursor-not-allowed');
+                        document.getElementById('prev-question').disabled = true;
+                    }
+                }
+            });
+        }
+        
+        function calculateResults() {
+            // Get all answers
+            const answers = {};
+            for (let i = 1; i <= 10; i++) {
+                const selectedAnswer = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selectedAnswer) {
+                    answers[`q${i}`] = parseInt(selectedAnswer.value);
+                }
+            }
+            
+            // Calculate scores
+            const dietScore = answers.q1 + answers.q6 + answers.q7 + answers.q8;
+            const exerciseScore = answers.q2;
+            const quitScore = answers.q3 + answers.q4;
+            const mentalScore = answers.q5;
+            const threeScore = answers.q6 + answers.q7 + answers.q8 + answers.q9 + answers.q10;
+            
+            const totalScore = dietScore + exerciseScore + quitScore + mentalScore + threeScore;
+            const maxScore = 30;
+            const percentage = Math.round((totalScore / maxScore) * 100);
+            
+            // Update result display
+            document.getElementById('result-score').textContent = percentage;
+            document.getElementById('result-progress').style.strokeDasharray = `${percentage * 0.942} 36`;
+            
+            // Update category scores
+            document.getElementById('diet-score').textContent = `${dietScore}/12`;
+            document.getElementById('diet-progress').style.width = `${(dietScore / 12) * 100}%`;
+            
+            document.getElementById('exercise-score').textContent = `${exerciseScore}/3`;
+            document.getElementById('exercise-progress').style.width = `${(exerciseScore / 3) * 100}%`;
+            
+            document.getElementById('quit-score').textContent = `${quitScore}/6`;
+            document.getElementById('quit-progress').style.width = `${(quitScore / 6) * 100}%`;
+            
+            document.getElementById('mental-score').textContent = `${mentalScore}/3`;
+            document.getElementById('mental-progress').style.width = `${(mentalScore / 3) * 100}%`;
+            
+            document.getElementById('three-score').textContent = `${threeScore}/9`;
+            document.getElementById('three-progress').style.width = `${(threeScore / 9) * 100}%`;
+            
+            // Determine result level
+            let level, levelClass;
+            if (percentage >= 80) {
+                level = '优秀';
+                levelClass = 'text-green-600';
+            } else if (percentage >= 60) {
+                level = '良好';
+                levelClass = 'text-blue-600';
+            } else if (percentage >= 40) {
+                level = '一般';
+                levelClass = 'text-yellow-600';
+            } else {
+                level = '需改进';
+                levelClass = 'text-red-600';
+            }
+            
+            document.getElementById('result-level').textContent = `您的健康生活方式评分为：${level}`;
+            document.getElementById('result-level').className = `text-center text-lg font-medium mt-4 ${levelClass}`;
+            
+            // Generate summary and personalized advice
+            generateAdvice(dietScore, exerciseScore, quitScore, mentalScore, threeScore);
+        }
+        
+        function generateAdvice(dietScore, exerciseScore, quitScore, mentalScore, threeScore) {
+            // Generate summary
+            const summary = document.getElementById('result-summary');
+            summary.innerHTML = '';
+            
+            if (dietScore >= 9) {
+                addSummaryItem(summary, '合理膳食', '您的饮食习惯非常健康，继续保持！');
+            } else if (dietScore >= 6) {
+                addSummaryItem(summary, '合理膳食', '您的饮食习惯良好，可以进一步增加蔬果摄入。');
+            } else {
+                addSummaryItem(summary, '合理膳食', '您的饮食习惯需要改进，建议增加蔬果摄入，减少盐油糖。');
+            }
+            
+            if (exerciseScore >= 2) {
+                addSummaryItem(summary, '适量运动', '您的运动习惯很好，继续保持！');
+            } else {
+                addSummaryItem(summary, '适量运动', '建议增加运动频率，每周至少150分钟中等强度运动。');
+            }
+            
+            if (quitScore >= 4) {
+                addSummaryItem(summary, '戒烟限酒', '您的烟酒习惯健康，继续保持！');
+            } else {
+                addSummaryItem(summary, '戒烟限酒', '建议减少吸烟和饮酒，最好戒烟戒酒。');
+            }
+            
+            if (mentalScore >= 2) {
+                addSummaryItem(summary, '心理平衡', '您的心理状态良好，继续保持积极乐观的心态！');
+            } else {
+                addSummaryItem(summary, '心理平衡', '建议学习压力管理技巧，保持积极乐观的心态。');
+            }
+            
+            if (threeScore >= 7) {
+                addSummaryItem(summary, '三减三健', '您在减盐减油减糖和健康口腔、体重、骨骼方面做得很好！');
+            } else if (threeScore >= 4) {
+                addSummaryItem(summary, '三减三健', '您在三减三健方面做得不错，可以进一步改进。');
+            } else {
+                addSummaryItem(summary, '三减三健', '建议加强三减三健意识，注意口腔健康和体重管理。');
+            }
+            
+            // Generate personalized advice
+            const advice = document.getElementById('personalized-advice');
+            advice.innerHTML = '';
+            
+            // Dietary advice
+            const dietAdvice = document.createElement('div');
+            dietAdvice.className = 'result-card';
+            
+            if (dietScore >= 9) {
+                dietAdvice.classList.add('result-good');
+                dietAdvice.innerHTML = `
+                    <h4 class="font-semibold text-gray-800 mb-2">合理膳食</h4>
+                    <p class="text-gray-700">您的饮食习惯非常健康！建议继续保持食物多样化，每天摄入12种以上食物，每周25种以上。可以尝试新的健康食谱，丰富饮食内容。</p>
+                `;
+            } else if (dietScore >= 6) {
+                dietAdvice.classList.add('result-average');
+                dietAdvice.innerHTML = `
+                    <h4 class="font-semibold text-gray-800 mb-2">合理膳食</h4>
+                    <p class="text-gray-700">您的饮食习惯良好，但还有改进空间。建议：</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>增加蔬果摄入，每天至少300-500g蔬菜，200-350g水果</li>
+                        <li>选择全谷物食品，如燕麦、糙米、全麦面包等</li>
+                        <li>适量摄入优质蛋白质，如鱼、禽、蛋、瘦肉、豆类等</li>
+                    </ul>
+                `;
+            } else {
+                dietAdvice.classList.add('result-poor');
+                dietAdvice.innerHTML = `
+                    <h4 class="font-semibold text-gray-800 mb-2">合理膳食</h4>
+                    <p class="text-gray-700">您的饮食习惯需要改进。建议：</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>食物多样化，每天摄入12种以上食物，每周25种以上</li>
+                        <li>增加蔬果摄入，每天至少300-500g蔬菜，200-350g水果</li>
+                        <li>控制盐油糖摄入，每天盐不超过5g，油25-30g，糖不超过50g</li>
+                        <li>选择全谷物食品，如燕麦、糙米、全麦面包等</li>
+                        <li>适量摄入优质蛋白质，如鱼、禽、蛋、瘦肉、豆类等</li>
+                        <li>每天喝300g牛奶或相当量的奶制品</li>
+                    </ul>
+                `;
+            }
+            advice.appendChild(dietAdvice);
+            
+            // Exercise advice
+            const exerciseAdvice = document.createElement('div');
+            exerciseAdvice.className = 'result-card';
+            
+            if (exerciseScore >= 2) {
+                exerciseAdvice.classList.add('result-good');
+                exerciseAdvice.innerHTML = `
+                    <h4 class="font-semibold text-gray-800 mb-2">适量运动</h4>
+                    <p class="text-gray-700">您的运动习惯很好！建议继续保持，并可以尝试不同类型的运动，如有氧运动、力量训练、柔韧性训练等，以全面提升身体素质。</p>
+                `;
+            } else {
+                exerciseAdvice.classList.add('result-poor');
+                exerciseAdvice.innerHTML = `
+                    <h4 class="font-semibold text-gray-800 mb-2">适量运动</h4>
+                    <p class="text-gray-700">建议增加运动频率和强度。世界卫生组织推荐：</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>每周至少150分钟中等强度有氧运动，如快走、慢跑、游泳等</li>
+                        <li>每周至少2次肌肉强化训练，如举重、俯卧撑、深蹲等</li>
+                        <li>减少久坐时间，每小时起身活动5-10分钟</li>
+                        <li>选择自己喜欢的运动方式，提高坚持的可能性</li>
+                        <li>运动前做好热身，运动后做好拉伸，避免运动损伤</li>
+                    </ul>
+                `;
+            }
+            advice.appendChild(exerciseAdvice);
+            
+            // Quit smoking and limit alcohol advice
+            const quitAdvice = document.createElement('div');
+            quitAdvice.className = 'result-card';
+            
+            if (quitScore >= 4) {
+                quitAdvice.classList.add('result-good');
+                quitAdvice.innerHTML = `
+                    <h4 class="font-semibold text-gray-800 mb-2">戒烟限酒</h4>
+                    <p class="text-gray-700">您的烟酒习惯健康！建议继续保持，并鼓励身边的人也戒烟限酒，创造健康的生活环境。</p>
+                `;
+            } else {
+                quitAdvice.classList.add('result-poor');
+                quitAdvice.innerHTML = `
+                    <h4 class="font-semibold text-gray-800 mb-2">戒烟限酒</h4>
+                    <p class="text-gray-700">吸烟和过量饮酒对健康危害极大。建议：</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>戒烟：任何时候戒烟都不晚，可以寻求医生帮助或参加戒烟课程</li>
+                        <li>限酒：男性每天酒精摄入量不超过25g，女性不超过15g</li>
+                        <li>避免空腹饮酒，饮酒前吃些食物</li>
+                        <li>选择低度数酒，慢慢饮用</li>
+                        <li>创造无烟环境，避免二手烟危害</li>
+                    </ul>
+                `;
+            }
+            advice.appendChild(quitAdvice);
+            
+            // Mental health advice
+            const mentalAdvice = document.createElement('div');
+            mentalAdvice.className = 'result-card';
+            
+            if (mentalScore >= 2) {
+                mentalAdvice.classList.add('result-good');
+                mentalAdvice.innerHTML = `
+                    <h4 class="font-semibold text-gray-800 mb-2">心理平衡</h4>
+                    <p class="text-gray-700">您的心理状态良好！建议继续保持积极乐观的心态，可以尝试学习新的减压技巧，如冥想、瑜伽等，进一步提升心理健康水平。</p>
+                `;
+            } else {
+                mentalAdvice.classList.add('result-poor');
+                mentalAdvice.innerHTML = `
+                    <h4 class="font-semibold text-gray-800 mb-2">心理平衡</h4>
+                    <p class="text-gray-700">心理健康对整体健康至关重要。建议：</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>学习压力管理技巧，如深呼吸、渐进性肌肉放松等</li>
+                        <li>保持积极乐观的心态，关注事物的积极面</li>
+                        <li>培养兴趣爱好，丰富生活内容</li>
+                        <li>与家人朋友保持良好沟通，寻求社会支持</li>
+                        <li>保证充足睡眠，每天7-8小时</li>
+                        <li>如有需要，寻求专业心理咨询帮助</li>
+                    </ul>
+                `;
+            }
+            advice.appendChild(mentalAdvice);
+            
+            // Three reductions and three healths advice
+            const threeAdvice = document.createElement('div');
+            threeAdvice.className = 'result-card';
+            
+            if (threeScore >= 7) {
+                threeAdvice.classList.add('result-good');
+                threeAdvice.innerHTML = `
+                    <h4 class="font-semibold text-gray-800 mb-2">三减三健</h4>
+                    <p class="text-gray-700">您在减盐减油减糖和健康口腔、体重、骨骼方面做得很好！建议继续保持，并可以学习更多相关知识，帮助他人改善健康状况。</p>
+                `;
+            } else if (threeScore >= 4) {
+                threeAdvice.classList.add('result-average');
+                threeAdvice.innerHTML = `
+                    <h4 class="font-semibold text-gray-800 mb-2">三减三健</h4>
+                    <p class="text-gray-700">您在三减三健方面做得不错，但还有改进空间。建议：</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>进一步减少盐油糖摄入，使用限盐勺、控油壶等工具</li>
+                        <li>每天刷牙2次，使用牙线，定期口腔检查</li>
+                        <li>保持健康体重，定期监测体重和腰围</li>
+                        <li>摄入富含钙和维生素D的食物，适当晒太阳，预防骨质疏松</li>
+                    </ul>
+                `;
+            } else {
+                threeAdvice.classList.add('result-poor');
+                threeAdvice.innerHTML = `
+                    <h4 class="font-semibold text-gray-800 mb-2">三减三健</h4>
+                    <p class="text-gray-700">三减三健是健康生活的重要组成部分。建议：</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>减盐：每天盐摄入不超过5g，使用限盐勺，少吃腌制食品</li>
+                        <li>减油：每天油摄入25-30g，选择植物油，少吃油炸食品</li>
+                        <li>减糖：每天添加糖摄入不超过50g，少喝含糖饮料</li>
+                        <li>健康口腔：早晚刷牙，使用牙线，每年至少1次口腔检查</li>
+                        <li>健康体重：保持BMI在18.5-23.9之间，控制腰围</li>
+                        <li>健康骨骼：摄入富含钙和维生素D的食物，适当晒太阳，适量运动</li>
+                    </ul>
+                `;
+            }
+            advice.appendChild(threeAdvice);
+        }
+        
+        function addSummaryItem(container, title, content) {
+            const item = document.createElement('li');
+            item.className = 'flex items-start';
+            item.innerHTML = `
+                <i class="fa fa-check-circle text-primary mt-1 mr-3"></i>
+                <div>
+                    <span class="font-medium">${title}：</span>
+                    <span>${content}</span>
+                </div>
+            `;
+            container.appendChild(item);
+        }
+        
+        function resetAssessment() {
+            // Reset all answers
+            document.querySelectorAll('input[type="radio"]').forEach(input => {
+                input.checked = false;
+            });
+            
+            // Show first question
+            document.querySelectorAll('.question').forEach(question => {
+                question.classList.add('hidden');
+                question.classList.remove('active');
+            });
+            document.querySelector('.question[data-question="1"]').classList.remove('hidden');
+            document.querySelector('.question[data-question="1"]').classList.add('active');
+            
+            // Reset question counter and progress bar
+            document.getElementById('current-question').textContent = '1';
+            document.getElementById('question-progress').style.width = '10%';
+            
+            // Show question container and navigation buttons
+            document.getElementById('question-container').classList.remove('hidden');
+            document.getElementById('prev-question').classList.remove('hidden');
+            document.getElementById('next-question').classList.remove('hidden');
+            document.getElementById('assessment-result').classList.add('hidden');
+            
+            // Disable prev button
+            document.getElementById('prev-question').classList.add('opacity-50', 'cursor-not-allowed');
+            document.getElementById('prev-question').disabled = true;
+        }
+        
+        // Navigation dot click handlers
+        document.querySelectorAll('.nav-dot').forEach(dot => {
+            dot.addEventListener('click', function() {
+                const pageNumber = parseInt(this.dataset.page);
+                showPage(pageNumber);
+            });
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') {
+                nextPage();
+            } else if (event.key === 'ArrowLeft') {
+                prevPage();
+            }
+        });
+    </script>
+</body>
+</html>
